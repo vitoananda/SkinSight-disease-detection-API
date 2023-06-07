@@ -13,6 +13,7 @@ import urllib.request
 import datetime
 from firebase_admin import db
 from firebase_admin import firestore
+import pytz
 
 
 
@@ -100,7 +101,7 @@ def upload_file_to_bucket(bucket_name, file_name, file):
 
     return public_url
 
-@app.route('/api/upload/<uid>', methods=['POST'])
+@app.route('/detect/<uid>', methods=['POST'])
 def upload_skin_picture(uid):
     try:
         if len(request.files) == 0:
@@ -118,18 +119,24 @@ def upload_skin_picture(uid):
 
         predicted_class = run_image_classification(public_url)
 
-        server_timestamp = datetime.datetime.now()
+        client_timestamp = datetime.datetime.now()
+
+        # Adjust timestamp to client's time zone
+        client_timezone = pytz.timezone('Asia/Jakarta')  # Replace with the client's time zone
+        client_timestamp = client_timezone.localize(client_timestamp)
 
         doc_ref = db.collection('users').document(uid)
         doc_ref.update({
             'history': firestore.ArrayUnion([{
-                'datetime': server_timestamp,
+                'type' : 'Skin Disease Detection',
+                'datetime': client_timestamp,
                 'predicted_class': predicted_class,
                 'public_url': public_url,
             }])
         })
 
         response = jsonify({
+            'type' : 'Skin Disease Detection',
             'status': 'Success',
             'message': 'Skin picture berhasil ditambahkan',
             'public_url': public_url,
@@ -149,7 +156,7 @@ def upload_skin_picture(uid):
         response.status_code = 500
         return response
 
-@app.route('/api/upload/<uid>', methods=['GET'])
+@app.route('/history/<uid>', methods=['GET'])
 def get_skin_picture_history(uid):
     try:
         # Retrieve the user document
@@ -162,15 +169,15 @@ def get_skin_picture_history(uid):
 
             response = jsonify({
                 'status': 'Success',
-                'message': 'Skin picture history retrieved successfully',
-                'history': history
+                'message': 'Skin detection history berhasil didapatkan',
+                'data': history
             })
             response.status_code = 200
             return response
         else:
             response = jsonify({
                 'status': 'Failed',
-                'message': 'User not found'
+                'message': 'User tidak ditemukan'
             })
             response.status_code = 404
             return response
@@ -186,7 +193,7 @@ def get_skin_picture_history(uid):
         response.status_code = 500
         return response
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=8080)
 
 
