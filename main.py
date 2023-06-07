@@ -38,6 +38,7 @@ db = firestore.client()
 app = Flask(__name__)
 bucket_name = "skinsight-skin-disease" 
 
+
 def predict_image_class(image_path, model_h5_path, class_mapping):
     # Load and preprocess the input image
     image = Image.open(image_path)
@@ -116,11 +117,9 @@ def upload_skin_picture(uid):
 
         predicted_class = run_image_classification(public_url, 'modelv1.h5')
 
-        client_timestamp = datetime.datetime.now()
-
         # Adjust timestamp to client's time zone
-        client_timezone = pytz.timezone('Asia/Jakarta')  # Replace with the client's time zone
-        client_timestamp = client_timezone.localize(client_timestamp)
+        client_timezone = pytz.timezone('Asia/Jakarta')  # Replace with the appropriate time zone
+        client_timestamp = datetime.datetime.now(client_timezone)
 
         doc_ref = db.collection('users').document(uid)
         doc_ref.update({
@@ -164,10 +163,22 @@ def get_skin_picture_history(uid):
             # Retrieve the history data from the document
             history = doc.to_dict().get('history', [])
 
+            formatted_history = []
+            for item in history:
+                datetime_value = item['datetime']
+                datetime_utc = datetime_value.replace(tzinfo=pytz.UTC)
+                datetime_local = datetime_utc.astimezone(pytz.timezone('Asia/Jakarta'))
+                formatted_datetime = datetime_local.strftime("%d %B, %Y at %H:%M:%S")
+                item['datetime'] = formatted_datetime
+                formatted_history.append(item)
+
+            # Reverse the order of the history list
+            formatted_history.reverse()
+
             response = jsonify({
                 'status': 'Success',
                 'message': 'Skin detection history berhasil didapatkan',
-                'data': history
+                'data': formatted_history
             })
             response.status_code = 200
             return response
