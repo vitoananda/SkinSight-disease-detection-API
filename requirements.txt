@@ -1,0 +1,9 @@
+flask
+numpy
+Pillow
+tensorflow
+h5py
+google-cloud-storage
+python-dotenv
+firebase-admin
+pytz
