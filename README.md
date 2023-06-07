@@ -1,12 +1,14 @@
 # How to use
 clone repository dengan 
 ```
-  git clone https://github.com/vitoananda/SkinSight-User-API.git
+  git clone https://github.com/vitoananda/SkinSight-disease-detection-API.git
 ```
 
-Kemudian masukan file keyfile,json yang anda dapatkan dari service account anda yang memiliki role Cloud Storage Admin, Cloud Storage Creator, dan Cloud Storage Viewer
+Kemudian masukan file keyfile.json yang anda dapatkan dari service account anda yang memiliki role Cloud Storage Admin, Cloud Storage Creator, dan Cloud Storage Viewer
 
-Kemudian ubah isi file .env anda dengan konfigurasi project firebase anda
+Kemudian masukan juga file serviceAccount.json yang didapatkan dari console project firebase anda
+
+Kemudian ubah isi file .env anda dengan konfigurasi project firebase dan google cloud console anda
 
 # Endpoints
 
@@ -26,7 +28,7 @@ Request parameter:
 uid: uid user
 
 Request body: 
-<p align="left"> <img src="./documentation asset/disease body.jpg" width="700" height="200" /> </p>
+<p align="left"> <img src="./documentation asset/disease body.jpg" width="700" height="400" /> </p>
 Response: 
 
 ```json
