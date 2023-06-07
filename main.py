@@ -66,7 +66,7 @@ def predict_image_class(image_path, model_h5_path, class_mapping):
 
     return predicted_class
 
-def run_image_classification(image_url):
+def run_image_classification(image_url, model_h5_path):
     # Download the image from the provided URL
     image_path = 'temp_image.jpg'
     urllib.request.urlretrieve(image_url, image_path)
@@ -74,9 +74,6 @@ def run_image_classification(image_url):
     # Define the class mapping
     class_mapping = {"Actinic Keratosis": 0, "Basal Cell Carcinoma": 1, "Benign Keratosis": 2,
                      "Dermatofibroma": 3, "Melanoma": 4, "Melanocytic nevi": 5, "Angiomas to angiokeratomas": 6}
-
-    # Set the file paths
-    model_h5_path = os.path.abspath("modelv1.h5")
 
     # Call the predict_image_class function
     predicted_class = predict_image_class(image_path, model_h5_path, class_mapping)
@@ -101,7 +98,7 @@ def upload_file_to_bucket(bucket_name, file_name, file):
 
     return public_url
 
-@app.route('/detect/<uid>', methods=['POST'])
+@app.route('/detect-disease/<uid>', methods=['POST'])
 def upload_skin_picture(uid):
     try:
         if len(request.files) == 0:
@@ -117,7 +114,7 @@ def upload_skin_picture(uid):
 
         public_url = upload_file_to_bucket(bucket_name, file_name, file)
 
-        predicted_class = run_image_classification(public_url)
+        predicted_class = run_image_classification(public_url, 'modelv1.h5')
 
         client_timestamp = datetime.datetime.now()
 
@@ -131,15 +128,15 @@ def upload_skin_picture(uid):
                 'type' : 'Skin Disease Detection',
                 'datetime': client_timestamp,
                 'predicted_class': predicted_class,
-                'public_url': public_url,
+                'detection_img': public_url,
             }])
         })
 
         response = jsonify({
             'type' : 'Skin Disease Detection',
             'status': 'Success',
-            'message': 'Skin picture berhasil ditambahkan',
-            'public_url': public_url,
+            'message': 'Deteksi penyakit berhasil',
+            'detection_img': public_url,
             'class' : predicted_class
         })
         response.status_code = 200
