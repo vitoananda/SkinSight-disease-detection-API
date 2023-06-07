@@ -28,7 +28,7 @@ Request parameter:
 uid: uid user
 
 Request body: 
-<p align="left"> <img src="./documentation asset/disease body.jpg" width="700" height="400" /> </p>
+<p align="left"> <img src="./documentation asset/disease body.jpg" width="700" height="300" /> </p>
 Response: 
 
 ```json
