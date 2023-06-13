@@ -117,6 +117,21 @@ def upload_skin_picture(uid):
 
         predicted_class = run_image_classification(public_url, 'modelv1.h5')
 
+        if predicted_class == "Actinic Keratosis":
+            description = "Actinic Keratoses (Solar Keratoses) dan Intraepithelial Carcinoma (penyakit Bowen) merupakan jenis lesi kulit yang dapat mengakibatkan kondisi kulit kasar, menebal, dan bersisik akibat paparan sinar matahari dalam waktu yang lama. Kedua lesi kulit ini merupakan jenis lesi pre-kanker. Actinic Keratoses (Solar Keratoses) lebih umum terjadi di bagian wajah sedangkan penyakit Bowen lebih umum di bagian tubuh."
+        elif predicted_class == "Basal Cell Carcinoma":
+            description = "Basal cell carcinoma adalah salah satu varian dari salah satu kanker kulit yang berkembang dari Epithelium. Morfologi dari lesi ini dapat berupa permukaan datar, nodul, pigmen, cystic, dan lain lain."
+        elif predicted_class == "Benign Keratosis":
+            description = "Kerotosis jinak (Benign keratosis) atau juga disebut Seborrheic Keratoses (SK) adalah salah satu perkembangan sel kulit yang tidak membahayakan. Lesi in meskipun epidermal tumor tetapi bukan termasuk dalam jenis pre-kanker.  Kerotosis jinak umumnya muncul searah dengan pertambahan usia."
+        elif predicted_class == "Dermatofibroma":
+            description = "Dermatofibroma termasuk jenis lesi kulit jinak yang disebabkan oleh pertumbuhan berlebih dari campuran berbagai jenis sel pada lapisan dermis kulit. Pertumbuhan kulit yang menyebabkan Dermatofibroma biasanya terjadi setelah mengalami beberapa jenis trauma kecil pada kulit, seperti luka tusuk akibat serpihan kaca atau gigitan serangga."
+        elif predicted_class == "Melanoma":
+            description = "Melanoma adalah kanker kulit yang berkembang dari melanocytes (sel pigmen). Melanoma adalah jenis kanker kulit yang jarang terjadi. Warna dari melanoma dapat coklat, hitam,  tetapi ada juga yang berwarna merah atau merah muda. "
+        elif predicted_class == "Melanocytic nevi":
+            description = "Melanocytic naevus (mole) atau yang dikenal tahi lalat adalah jenis lesi kulit jinak yang diakibatkan karena adanya proliferasi dari melanocytes (sel pigmen). Tahi lalat dapat berupa permukaan halus atau benjolan kecil. Tahi lalat dapat dimiliki sejak lahir."
+        elif predicted_class == "Angiomas to angiokeratomas":
+            description = "Angiomas dan Angiokeratomas adalah pertumbuhan kulit yang terkait dengan pembuluh darah yang tidak normal. Angiomas muncul sebagai bintik-bintik merah atau ungu kecil, sementara Angiokeratomas adalah tonjolan merah tua hingga biru-hitam dengan lapisan kulit yang menebal di atasnya. Meskipun keduanya umumnya tidak berbahaya, Angiokeratomas kadang-kadang dapat menyebabkan pendarahan atau gatal."
+
         # Adjust timestamp to client's time zone
         client_timezone = pytz.timezone('Asia/Jakarta')  # Replace with the appropriate time zone
         client_timestamp = datetime.datetime.now(client_timezone)
@@ -128,6 +143,7 @@ def upload_skin_picture(uid):
                 'datetime': client_timestamp,
                 'predicted_class': predicted_class,
                 'detection_img': public_url,
+                'description' : description
             }])
         })
 
@@ -136,7 +152,8 @@ def upload_skin_picture(uid):
             'status': 'Success',
             'message': 'Deteksi penyakit berhasil',
             'detection_img': public_url,
-            'class' : predicted_class
+            'class' : predicted_class,
+            'description' : description
         })
         response.status_code = 200
         return response
