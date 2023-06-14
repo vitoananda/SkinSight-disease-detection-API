@@ -37,7 +37,8 @@ Response:
     "status": "Success",
     "message": "Deteksi penyakit berhasil",
     "detection_img": "{public_url}",
-    "class" : "{predicted_class}"
+    "class" : "{predicted_class}",
+    "description" : "{description}
 }
 ```
 200 Jika deteksi penyakit berhasil
