@@ -120,7 +120,7 @@ def upload_skin_picture(uid):
         if predicted_class == "Actinic Keratosis":
             description = "Actinic Keratoses (Solar Keratoses) dan Intraepithelial Carcinoma (penyakit Bowen) merupakan jenis lesi kulit yang dapat mengakibatkan kondisi kulit kasar, menebal, dan bersisik akibat paparan sinar matahari dalam waktu yang lama. Kedua lesi kulit ini merupakan jenis lesi pre-kanker. Actinic Keratoses (Solar Keratoses) lebih umum terjadi di bagian wajah sedangkan penyakit Bowen lebih umum di bagian tubuh."
         elif predicted_class == "Basal Cell Carcinoma":
-            description = "<em>Basal cell carcinoma<em> adalah salah satu varian dari salah satu kanker kulit yang berkembang dari Epithelium. Morfologi dari lesi ini dapat berupa permukaan datar, nodul, pigmen, cystic, dan lain lain."
+            description = "Basal cell carcinoma adalah salah satu varian dari salah satu kanker kulit yang berkembang dari Epithelium. Morfologi dari lesi ini dapat berupa permukaan datar, nodul, pigmen, cystic, dan lain lain."
         elif predicted_class == "Benign Keratosis":
             description = "Kerotosis jinak (Benign keratosis) atau juga disebut Seborrheic Keratoses (SK) adalah salah satu perkembangan sel kulit yang tidak membahayakan. Lesi in meskipun epidermal tumor tetapi bukan termasuk dalam jenis pre-kanker.  Kerotosis jinak umumnya muncul searah dengan pertambahan usia."
         elif predicted_class == "Dermatofibroma":
